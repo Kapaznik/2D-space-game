@@ -1,6 +1,7 @@
 # 2D space game - dodge the aliens and beat the highscore!
 > An experience out of Earth
 > Video example 
+
 https://user-images.githubusercontent.com/87901270/231768994-71d375a0-12ee-498e-a71d-b3289532dd23.mp4
 
 ## Table of Contents
@@ -34,28 +35,6 @@ List the ready features here:
 ## Screenshots
 
 ![Game screen](https://user-images.githubusercontent.com/87901270/231770528-f400ccbf-c00b-4909-91b9-8df5678ca0c9.jpg)
-
-
-## Setup
-
-### requirements.txt:
-
->pytube == 12.1.0
-
->telegram == 0.0.1
-
->tornado~=6.2
-
->APScheduler==3.6.3
-
->python-telegram-bot 12.8
-
-
->pytz ==2018.6
-
->setuptools == 63.2.0
-
->six == 1.4.0
 
 
 ## Project Status
