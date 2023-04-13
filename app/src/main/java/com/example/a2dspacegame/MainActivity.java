@@ -137,25 +137,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setArrowsListeners() {
+        // Hide arrows by default
         playerView[RIGHT].setVisibility(View.INVISIBLE);
         playerView[LEFT].setVisibility(View.INVISIBLE);
+
         rightArrow.setOnClickListener(v -> {
             if (spacePos < RIGHT) {
                 playerView[spacePos].setVisibility(View.INVISIBLE);
-                playerView[++spacePos].setVisibility(View.VISIBLE);
+                spacePos++;
+                playerView[spacePos].setVisibility(View.VISIBLE);
             }
         });
+
+        // Set listener for the left arrow button
         leftArrow.setOnClickListener(v -> {
             if (spacePos > LEFT) {
                 playerView[spacePos].setVisibility(View.INVISIBLE);
-                playerView[--spacePos].setVisibility(View.VISIBLE);
+                spacePos--;
+                playerView[spacePos].setVisibility(View.VISIBLE);
             }
         });
     }
 
     private void resetGame() {
         score = 0;
+        lifeCounter = 3;
         spacePos = CENTER;
+
         playerView[LEFT].setVisibility(View.INVISIBLE);
         playerView[CENTER].setVisibility(View.VISIBLE);
         playerView[RIGHT].setVisibility(View.INVISIBLE);
@@ -167,15 +175,14 @@ public class MainActivity extends AppCompatActivity {
             LivesView[1].setVisibility(View.VISIBLE);
             LivesView[2].setVisibility(View.VISIBLE);
         }
-        lifeCounter = 3;
     }
     private void updateGame() {
         int RandomLane = random.nextInt(LANES);
         clock++;
 
         for (int i = 0; i < LANES; i++) {
-            if (AlienView[5][i].getVisibility() == View.VISIBLE) {
-                AlienView[5][i].setVisibility(View.INVISIBLE);
+            if (AlienView[ROWS-1][i].getVisibility() == View.VISIBLE) {
+                AlienView[ROWS-1][i].setVisibility(View.INVISIBLE);
             }
 
             for (int j = ROWS-1; j >= 0; j--) {
@@ -192,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
         private void checkHit() {
-        if (AlienView[5][spacePos].getVisibility() == View.VISIBLE
+        if (AlienView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
                 && playerView[spacePos].getVisibility() == View.VISIBLE) {
             LivesView[--lifeCounter].setVisibility(View.INVISIBLE);
             makeToast();
