@@ -18,26 +18,26 @@ public class MainActivity extends AppCompatActivity {
     final static int ROWS = 6;
 
     private static ImageView[][] AlienView;
-
     private static ImageView[] playerView;
     private static ImageView[] LivesView;
     private ImageButton leftArrow, rightArrow;
+
+    private TextView PointsView;
 
     private static final int LEFT = 0;
     private static final int CENTER = 1;
     private static final int RIGHT = 2;
 
+    private static int spacePos = CENTER;
+
     public static int lifeCounter = 3;
     private static int score = 0;
-
-    private static int spacePos = CENTER;
 
     private static final int DELAY = 500;
 
     public int clock = 0;
 
     Random random = new Random();
-
 
     CountDownTimer countDownTimer;
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         AlienView = new ImageView[6][3];
         playerView = new ImageView[3];
         LivesView = new ImageView[3];
-        TextView pointsView = findViewById(R.id.points_view);
+        PointsView = findViewById(R.id.points_view);
 
         AlienView[0][LEFT] = findViewById(R.id.alien00);
         AlienView[1][LEFT] = findViewById(R.id.alien10);
@@ -133,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setArrowsListeners() {
-        // Hide arrows by default
         playerView[RIGHT].setVisibility(View.INVISIBLE);
         playerView[LEFT].setVisibility(View.INVISIBLE);
 
@@ -144,8 +143,7 @@ public class MainActivity extends AppCompatActivity {
                 playerView[spacePos].setVisibility(View.VISIBLE);
             }
         });
-
-        // Set listener for the left arrow button
+        
         leftArrow.setOnClickListener(v -> {
             if (spacePos > LEFT) {
                 playerView[spacePos].setVisibility(View.INVISIBLE);
