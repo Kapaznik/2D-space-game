@@ -62,7 +62,7 @@
         android:id="@+id/road"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:rowCount="8"
+        android:rowCount="9"
         android:columnCount="3"
         android:layout_marginTop="40dp">
 
@@ -270,53 +270,46 @@
             android:src="@drawable/alien"
             android:contentDescription="@null"/>
 
-        <!--row7-player-->
+        <!--row6-->
         <ImageView
-            android:id="@+id/ship_mid"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_row="6"
-            android:layout_column="1"
-            android:layout_columnWeight="1"
-            android:layout_rowWeight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/spaceship_player"
-            android:rotation="180"
-            android:scaleType="fitCenter"
-            android:contentDescription="@null"/>
-
-        <ImageView
-            android:id="@+id/ship_left"
+            android:id="@+id/alien60"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_row="6"
             android:layout_column="0"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/spaceship_player"
-            android:rotation="180"
-            android:scaleType="fitCenter"
+            android:src="@drawable/alien"
             android:contentDescription="@null"/>
 
         <ImageView
-            android:id="@+id/ship_right"
+            android:id="@+id/alien61"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="6"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:src="@drawable/alien"
+            android:contentDescription="@null"/>
+
+        <ImageView
+            android:id="@+id/alien62"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_row="6"
             android:layout_column="2"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/spaceship_player"
-            android:rotation="180"
-            android:scaleType="fitCenter"
+            android:src="@drawable/alien"
             android:contentDescription="@null"/>
+
+        <!--row7-player-->
         <!--row8 - buttons-->
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_row="7"
+            android:layout_row="8"
             android:layout_column="1"
             android:layout_columnWeight="1"
             android:layout_rowWeight="1"/>
@@ -325,7 +318,7 @@
             android:id="@+id/btn_left"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_row="7"
+            android:layout_row="8"
             android:layout_rowWeight="1"
             android:layout_column="0"
             android:layout_columnWeight="1"
@@ -339,7 +332,7 @@
             android:id="@+id/btn_right"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_row="7"
+            android:layout_row="8"
             android:layout_rowWeight="1"
             android:layout_column="2"
             android:layout_columnWeight="1"
@@ -350,5 +343,60 @@
             android:contentDescription="@string/right_button"/>
     </GridLayout>
 
+
+
+    <GridLayout
+        android:id="@+id/road2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:rowCount="1"
+        android:columnCount="3"
+        android:layout_marginBottom="70dp"
+        android:layout_marginTop="30dp">
+
+
+        <ImageView
+            android:id="@+id/ship_mid"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/spaceship_player"
+            android:rotation="180"
+            android:contentDescription="@null"/>
+
+        <ImageView
+            android:id="@+id/ship_left"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/spaceship_player"
+            android:rotation="180"
+            android:scaleType="fitCenter"
+            android:contentDescription="@null"/>
+
+        <ImageView
+            android:id="@+id/ship_right"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/spaceship_player"
+            android:rotation="180"
+            android:scaleType="fitCenter"
+            android:contentDescription="@null"/>
+
+    </GridLayout>
 
 </RelativeLayout >

@@ -15,7 +15,7 @@ import java.util.TimerTask;
 public class MainActivity extends AppCompatActivity {
 
     final static int LANES = 3;
-    final static int ROWS = 6;
+    final static int ROWS = 7;
 
     private static ImageView[][] AlienView;
     private static ImageView[] playerView;
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initViews() {
-        AlienView = new ImageView[6][3];
+        AlienView = new ImageView[7][3];
         playerView = new ImageView[3];
         LivesView = new ImageView[3];
         PointsView = findViewById(R.id.points_view);
@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         AlienView[3][LEFT] = findViewById(R.id.alien30);
         AlienView[4][LEFT] = findViewById(R.id.alien40);
         AlienView[5][LEFT] = findViewById(R.id.alien50);
+        AlienView[6][LEFT] = findViewById(R.id.alien60);
 
 
         AlienView[0][CENTER] = findViewById(R.id.alien01);
@@ -109,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
         AlienView[3][CENTER] = findViewById(R.id.alien31);
         AlienView[4][CENTER] = findViewById(R.id.alien41);
         AlienView[5][CENTER] = findViewById(R.id.alien51);
+        AlienView[6][CENTER] = findViewById(R.id.alien61);
 
 
         AlienView[0][RIGHT] = findViewById(R.id.alien02);
@@ -117,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         AlienView[3][RIGHT] = findViewById(R.id.alien32);
         AlienView[4][RIGHT] = findViewById(R.id.alien42);
         AlienView[5][RIGHT] = findViewById(R.id.alien52);
+        AlienView[6][RIGHT] = findViewById(R.id.alien62);
 
 
         playerView[LEFT] = findViewById(R.id.ship_left);
@@ -141,14 +144,16 @@ public class MainActivity extends AppCompatActivity {
                 playerView[spacePos].setVisibility(View.INVISIBLE);
                 spacePos++;
                 playerView[spacePos].setVisibility(View.VISIBLE);
+                checkHit();
             }
         });
-        
+
         leftArrow.setOnClickListener(v -> {
             if (spacePos > LEFT) {
                 playerView[spacePos].setVisibility(View.INVISIBLE);
                 spacePos--;
                 playerView[spacePos].setVisibility(View.VISIBLE);
+                checkHit();
             }
         });
     }
@@ -195,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         private void checkHit() {
         if (AlienView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
                 && playerView[spacePos].getVisibility() == View.VISIBLE) {
+            AlienView[ROWS-1][spacePos].setVisibility(View.INVISIBLE);
             LivesView[--lifeCounter].setVisibility(View.INVISIBLE);
             GameUtils.makeToast(this, lifeCounter);
             GameUtils.vibrate(this);
