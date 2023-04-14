@@ -270,7 +270,7 @@
             android:src="@drawable/alien"
             android:contentDescription="@null"/>
 
-        <!--row6-->
+        <!--row7-->
         <ImageView
             android:id="@+id/alien60"
             android:layout_width="0dp"
@@ -304,7 +304,6 @@
             android:src="@drawable/alien"
             android:contentDescription="@null"/>
 
-        <!--row7-player-->
         <!--row8 - buttons-->
         <View
             android:layout_width="0dp"
@@ -344,7 +343,6 @@
     </GridLayout>
 
 
-
     <GridLayout
         android:id="@+id/road2"
         android:layout_width="match_parent"
@@ -355,7 +353,7 @@
         android:layout_marginBottom="70dp"
         android:layout_marginTop="30dp">
 
-
+        <!--player row-->
         <ImageView
             android:id="@+id/ship_mid"
             android:layout_width="0dp"
