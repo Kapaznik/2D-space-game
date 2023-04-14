@@ -2,17 +2,12 @@ package com.example.a2dspacegame;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,20 +16,21 @@ public class MainActivity extends AppCompatActivity {
 
     final static int LANES = 3;
     final static int ROWS = 6;
-    private TextView PointsView;
 
-    private ImageView[][] AlienView;
+    private static ImageView[][] AlienView;
 
-    private ImageView[] playerView;
-    private ImageView[] LivesView;
+    private static ImageView[] playerView;
+    private static ImageView[] LivesView;
     private ImageButton leftArrow, rightArrow;
 
-    private final int LEFT = 0, CENTER = 1,RIGHT = 2;
+    private static final int LEFT = 0;
+    private static final int CENTER = 1;
+    private static final int RIGHT = 2;
 
-    private int lifeCounter = 3;
-    private int score = 0;
+    public static int lifeCounter = 3;
+    private static int score = 0;
 
-    private int spacePos = CENTER;
+    private static int spacePos = CENTER;
 
     private static final int DELAY = 500;
 
@@ -97,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         AlienView = new ImageView[6][3];
         playerView = new ImageView[3];
         LivesView = new ImageView[3];
-        PointsView = findViewById(R.id.points_view);
+        TextView pointsView = findViewById(R.id.points_view);
 
         AlienView[0][LEFT] = findViewById(R.id.alien00);
         AlienView[1][LEFT] = findViewById(R.id.alien10);
@@ -159,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void resetGame() {
+    public static void resetGame() {
         score = 0;
         lifeCounter = 3;
         spacePos = CENTER;
@@ -202,8 +198,8 @@ public class MainActivity extends AppCompatActivity {
         if (AlienView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
                 && playerView[spacePos].getVisibility() == View.VISIBLE) {
             LivesView[--lifeCounter].setVisibility(View.INVISIBLE);
-            makeToast();
-            vibrate();
+            GameUtils.makeToast(this, lifeCounter);
+            GameUtils.vibrate(this);
         }
         else{
             score++;
@@ -211,22 +207,4 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void makeToast() {
-            switch (lifeCounter) {
-                case 2:
-                    Toast.makeText(this, "2 lives left", Toast.LENGTH_LONG).show();
-                    break;
-                case 1:
-                    Toast.makeText(this, "1 life left", Toast.LENGTH_LONG).show();
-                    break;
-                case 0:
-                    Toast.makeText(this, "game over!", Toast.LENGTH_LONG).show();
-                    resetGame();
-            }
-    }
-
-    private void vibrate() {
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        v.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
-    }
 }
