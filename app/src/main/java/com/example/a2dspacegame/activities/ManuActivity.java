@@ -74,13 +74,15 @@ public class ManuActivity extends AppCompatActivity {
                     gameIntent.putExtra(GAME_MODE,"Sensors");
                 else
                     gameIntent.putExtra(GAME_MODE,"Buttons");
+
                 if (isFastButtonClicked) {
                     gameIntent.putExtra(SPEED, "FAST");
                 } else if (isSlowButtonClicked) {
                     gameIntent.putExtra(SPEED, "SLOW");
                 }
-
                 startActivity(gameIntent);
+
+
             }});
         highScores.setOnClickListener(new View.OnClickListener() {
             @Override

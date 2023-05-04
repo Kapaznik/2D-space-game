@@ -1,13 +1,24 @@
 package com.example.a2dspacegame.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 
+import androidx.appcompat.app.AppCompatActivity;
+//import static com.example.a2dspacegame.activities.ManuActivity.GAME_MODE;
+
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.hardware.SensorManager;
+import android.media.MediaPlayer;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.widget.Toast;
 
 import com.example.a2dspacegame.R;
 
@@ -19,6 +30,7 @@ public class GameActivity extends AppCompatActivity {
 
     final static int LANES = 5;
     final static int ROWS = 9;
+    private static String GAME_MODE = "";
 
     private static ImageView[][] AlienView;
     private static ImageView[][] PowerView;
@@ -48,6 +60,14 @@ public class GameActivity extends AppCompatActivity {
     Random random = new Random();
 
     CountDownTimer countDownTimer;
+
+    private String gameMode = "";
+
+    private SensorManager sensorManager;
+    private Sensor sensor;
+    private SensorEventListener accSensorEventListener;
+
+    public enum DirectionAction { LEFT,RIGHT }
 
     protected void onStart() {
         super.onStart();
@@ -102,15 +122,67 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        initViews();
+
+        // Retrieve game mode from intent and initialize sensors or arrows accordingly
+        if (getIntent() != null) {
+            String gameMode = getIntent().getStringExtra("GAME_MODE");
+            Toast.makeText(getApplicationContext(), "gameMode: " + gameMode, Toast.LENGTH_SHORT).show();
+            if (gameMode.equals("Sensors")) {
+                initSensor();
+            }
+            else {
+                setArrowsListeners();
+            }
+
+        }
+
+        // Retrieve speed from intent and set the delay accordingly
         String speed = getIntent().getStringExtra("SPEED");
         if (speed != null && speed.equals("FAST")) {
             DELAY = 500;
         } else if (speed != null && speed.equals("SLOW")) {
             DELAY = 1000;
         }
-        initViews();
-        setArrowsListeners();
     }
+
+    private void initSensor() {
+        sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        sensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        Sensor accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+        if (accelerometer != null) {
+            accSensorEventListener = new SensorEventListener() {
+                private boolean directionChanged = false;
+
+                public void onSensorChanged(SensorEvent event) {
+                    float x = event.values[0];
+                    if (!directionChanged && x <= -1) {
+                        DirectionAction action = DirectionAction.LEFT;
+                        moveCarBySensors(action);
+                        directionChanged = true;
+                    } else if (!directionChanged && x >= 1) {
+                        DirectionAction action = DirectionAction.RIGHT;
+                        moveCarBySensors(action);
+                        directionChanged = true;
+                    } else if (x > -1 && x < 1) {
+                        // Reset directionChanged flag when phone is back to vertical position
+                        directionChanged = false;
+                    }
+                }
+
+                @Override
+                public void onAccuracyChanged(Sensor sensor, int accuracy) {
+                }
+            };
+            leftArrow.setVisibility(View.INVISIBLE);
+            rightArrow.setVisibility(View.INVISIBLE);
+            setPlayerVisible();
+            sensorManager.registerListener(accSensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
 
     private void initViews() {
         AlienView = new ImageView[9][5];
@@ -145,10 +217,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setArrowsListeners() {
-        playerView[RIGHT].setVisibility(View.INVISIBLE);
-        playerView[RIGHT_CENTER].setVisibility(View.INVISIBLE);
-        playerView[LEFT].setVisibility(View.INVISIBLE);
-        playerView[LEFT_CENTER].setVisibility(View.INVISIBLE);
+        setPlayerVisible();
 
         rightArrow.setOnClickListener(v -> {
             if (spacePos < RIGHT) {
@@ -167,6 +236,29 @@ public class GameActivity extends AppCompatActivity {
                 checkHit(1);
             }
         });
+    }
+
+    private void setPlayerVisible() {
+        playerView[RIGHT].setVisibility(View.INVISIBLE);
+        playerView[RIGHT_CENTER].setVisibility(View.INVISIBLE);
+        playerView[LEFT].setVisibility(View.INVISIBLE);
+        playerView[LEFT_CENTER].setVisibility(View.INVISIBLE);
+    }
+
+    private void moveCarBySensors(DirectionAction action) {
+        if (action == DirectionAction.LEFT) {
+            if (spacePos < RIGHT) {
+                playerView[spacePos].setVisibility(View.INVISIBLE);
+                playerView[++spacePos].setVisibility(View.VISIBLE);
+                checkHit(1);
+            }
+        } else if (action == DirectionAction.RIGHT) {
+            if (spacePos > LEFT) {
+                playerView[spacePos].setVisibility(View.INVISIBLE);
+                playerView[--spacePos].setVisibility(View.VISIBLE);
+                checkHit(1);
+            }
+        }
     }
 
     public static void resetGame() {
