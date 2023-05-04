@@ -3,4 +3,14 @@
     <string name="score_000">Score: 000</string>
     <string name="left_button">Left button</string>
     <string name="right_button">Right button</string>
+    <string name="welcome_txt">2D Space Game</string>
+    <string name="start_txt">Start!</string>
+    <string name="fast_txt">Fast</string>
+    <string name="slow_txt">Slow</string>
+    <string name="buttons_txt">Buttons</string>
+    <string name="sensors_txt">Sensors</string>
+    <string name="mode_txt">Game mode:</string>
+    <string name="high_scores_txt">Highscores</string>
+
+
 </resources>

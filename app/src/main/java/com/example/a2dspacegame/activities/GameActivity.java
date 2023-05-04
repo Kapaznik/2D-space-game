@@ -1,4 +1,4 @@
-package com.example.a2dspacegame;
+package com.example.a2dspacegame.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,16 +8,20 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.a2dspacegame.R;
+
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class MainActivity extends AppCompatActivity {
+public class GameActivity extends AppCompatActivity {
 
-    final static int LANES = 3;
-    final static int ROWS = 7;
+    final static int LANES = 5;
+    final static int ROWS = 9;
 
     private static ImageView[][] AlienView;
+    private static ImageView[][] PowerView;
     private static ImageView[] playerView;
     private static ImageView[] LivesView;
     private ImageButton leftArrow, rightArrow;
@@ -25,15 +29,19 @@ public class MainActivity extends AppCompatActivity {
     private TextView PointsView;
 
     private static final int LEFT = 0;
-    private static final int CENTER = 1;
-    private static final int RIGHT = 2;
+
+    private static final int LEFT_CENTER = 1;
+    private static final int CENTER = 2;
+
+    private static final int RIGHT_CENTER = 3;
+    private static final int RIGHT = 4;
 
     private static int spacePos = CENTER;
 
     public static int lifeCounter = 3;
     private static int score = 0;
 
-    private static final int DELAY = 500;
+    private static int DELAY = 500;
 
     public int clock = 0;
 
@@ -67,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void newPower(int rand) {
+
+        if (PowerView[0][rand].getVisibility() != View.VISIBLE) {
+            PowerView[0][rand].setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         countDownTimer.cancel();
@@ -76,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        countDownTimer.cancel();
+        if (countDownTimer!= null) {
+            countDownTimer.cancel();
+        }
         finishAffinity();
     }
 
@@ -84,46 +101,38 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
+        String speed = getIntent().getStringExtra("SPEED");
+        if (speed != null && speed.equals("FAST")) {
+            DELAY = 500;
+        } else if (speed != null && speed.equals("SLOW")) {
+            DELAY = 1000;
+        }
         initViews();
         setArrowsListeners();
     }
 
     private void initViews() {
-        AlienView = new ImageView[7][3];
-        playerView = new ImageView[3];
+        AlienView = new ImageView[9][5];
+        PowerView = new ImageView[9][5];
+        playerView = new ImageView[5];
         LivesView = new ImageView[3];
         PointsView = findViewById(R.id.points_view);
 
-        AlienView[0][LEFT] = findViewById(R.id.alien00);
-        AlienView[1][LEFT] = findViewById(R.id.alien10);
-        AlienView[2][LEFT] = findViewById(R.id.alien20);
-        AlienView[3][LEFT] = findViewById(R.id.alien30);
-        AlienView[4][LEFT] = findViewById(R.id.alien40);
-        AlienView[5][LEFT] = findViewById(R.id.alien50);
-        AlienView[6][LEFT] = findViewById(R.id.alien60);
+        int[] alienIds = { R.id.alien00, R.id.alien10, R.id.alien20, R.id.alien30, R.id.alien40, R.id.alien50, R.id.alien60, R.id.alien70, R.id.alien80 };
+        int[] powerIds = { R.id.power00, R.id.power10, R.id.power20, R.id.power30, R.id.power40, R.id.power50, R.id.power60, R.id.power70, R.id.power80 };
 
-
-        AlienView[0][CENTER] = findViewById(R.id.alien01);
-        AlienView[1][CENTER] = findViewById(R.id.alien11);
-        AlienView[2][CENTER] = findViewById(R.id.alien21);
-        AlienView[3][CENTER] = findViewById(R.id.alien31);
-        AlienView[4][CENTER] = findViewById(R.id.alien41);
-        AlienView[5][CENTER] = findViewById(R.id.alien51);
-        AlienView[6][CENTER] = findViewById(R.id.alien61);
-
-
-        AlienView[0][RIGHT] = findViewById(R.id.alien02);
-        AlienView[1][RIGHT] = findViewById(R.id.alien12);
-        AlienView[2][RIGHT] = findViewById(R.id.alien22);
-        AlienView[3][RIGHT] = findViewById(R.id.alien32);
-        AlienView[4][RIGHT] = findViewById(R.id.alien42);
-        AlienView[5][RIGHT] = findViewById(R.id.alien52);
-        AlienView[6][RIGHT] = findViewById(R.id.alien62);
-
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 5; j++) {
+                AlienView[i][j] = findViewById(alienIds[i] + j);
+                PowerView[i][j] = findViewById(powerIds[i] + j);
+            }
+        }
 
         playerView[LEFT] = findViewById(R.id.ship_left);
+        playerView[LEFT_CENTER] = findViewById(R.id.ship_mid_left);
         playerView[CENTER] = findViewById(R.id.ship_mid);
+        playerView[RIGHT_CENTER] = findViewById(R.id.ship_mid_right);
         playerView[RIGHT] = findViewById(R.id.ship_right);
 
         leftArrow = findViewById(R.id.btn_left);
@@ -137,14 +146,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void setArrowsListeners() {
         playerView[RIGHT].setVisibility(View.INVISIBLE);
+        playerView[RIGHT_CENTER].setVisibility(View.INVISIBLE);
         playerView[LEFT].setVisibility(View.INVISIBLE);
+        playerView[LEFT_CENTER].setVisibility(View.INVISIBLE);
 
         rightArrow.setOnClickListener(v -> {
             if (spacePos < RIGHT) {
                 playerView[spacePos].setVisibility(View.INVISIBLE);
                 spacePos++;
                 playerView[spacePos].setVisibility(View.VISIBLE);
-                checkHit();
+                checkHit(1);
             }
         });
 
@@ -153,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 playerView[spacePos].setVisibility(View.INVISIBLE);
                 spacePos--;
                 playerView[spacePos].setVisibility(View.VISIBLE);
-                checkHit();
+                checkHit(1);
             }
         });
     }
@@ -169,6 +180,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < LANES; j++) {
                 AlienView[i][j].setVisibility(View.INVISIBLE);
+                PowerView[i][j].setVisibility(View.INVISIBLE);
             }
             LivesView[0].setVisibility(View.VISIBLE);
             LivesView[1].setVisibility(View.VISIBLE);
@@ -183,31 +195,60 @@ public class MainActivity extends AppCompatActivity {
             if (AlienView[ROWS-1][i].getVisibility() == View.VISIBLE) {
                 AlienView[ROWS-1][i].setVisibility(View.INVISIBLE);
             }
+            if (PowerView[ROWS-1][i].getVisibility() == View.VISIBLE) {
+                PowerView[ROWS-1][i].setVisibility(View.INVISIBLE);
+            }
 
             for (int j = ROWS-1; j >= 0; j--) {
                 if (AlienView[j][i].getVisibility() == View.VISIBLE) {
                     AlienView[j][i].setVisibility(View.INVISIBLE);
                     AlienView[j + 1][i].setVisibility(View.VISIBLE);
                 }
+                if (PowerView[j][i].getVisibility() == View.VISIBLE) {
+                    PowerView[j][i].setVisibility(View.INVISIBLE);
+                    PowerView[j + 1][i].setVisibility(View.VISIBLE);
+                }
             }
+
+
         }
         if (clock % 2 == 0) {
             newAlien(RandomLane);
         }
-        checkHit();
+
+        if (clock % 19 ==0){
+            newPower(RandomLane);
+        }
+        checkHit(0);
     }
 
-        private void checkHit() {
+        private void checkHit(int move)
+        {
         if (AlienView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
                 && playerView[spacePos].getVisibility() == View.VISIBLE) {
             AlienView[ROWS-1][spacePos].setVisibility(View.INVISIBLE);
             LivesView[--lifeCounter].setVisibility(View.INVISIBLE);
             GameUtils.makeToast(this, lifeCounter);
             GameUtils.vibrate(this);
+            if (score >=10) {
+                score -= 10;
+            }
+            else{
+                score=0;
+            }
+        }
+        if (PowerView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
+                && playerView[spacePos].getVisibility() == View.VISIBLE) {
+            PowerView[ROWS - 1][spacePos].setVisibility(View.INVISIBLE);
+            score += 10;
+            GameUtils.makeToast(this, -1);
+            GameUtils.vibrate(this);
         }
         else{
-            score++;
-            //PointsView.setText(String.valueOf(score));
+            if (move ==0)
+                score++;
+            String scoreSetText = "" + score;
+            PointsView.setText(scoreSetText);
         }
     }
 
