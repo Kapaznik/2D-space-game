@@ -7,20 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.widget.Toast;
 
 import com.example.a2dspacegame.R;
-import com.example.a2dspacegame.activities.GameUtils;
 
 import java.util.Random;
 import java.util.Timer;
@@ -56,6 +53,8 @@ public class GameActivity extends AppCompatActivity {
     private static int DELAY = 100;
 
     public int clock = 0;
+
+    public Timer timer;
 
     Random random = new Random();
 
@@ -104,7 +103,11 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        countDownTimer.cancel();
+        super.onPause();
+        if (countDownTimer!= null) {
+            countDownTimer.cancel();
+        }
+        timer.cancel();
         finishAffinity();
     }
 
@@ -114,15 +117,17 @@ public class GameActivity extends AppCompatActivity {
         if (countDownTimer!= null) {
             countDownTimer.cancel();
         }
+        timer.cancel();
         finishAffinity();
     }
-
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
         initViews();
 
         // Retrieve game mode from intent and initialize sensors or arrows accordingly
@@ -178,7 +183,7 @@ public class GameActivity extends AppCompatActivity {
             };
             leftArrow.setVisibility(View.INVISIBLE);
             rightArrow.setVisibility(View.INVISIBLE);
-            setPlayerVisible();
+            setPlayerPositions();
             sensorManager.registerListener(accSensorEventListener, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         }
     }
@@ -217,7 +222,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void setArrowsListeners() {
-        setPlayerVisible();
+        setPlayerPositions();
 
         rightArrow.setOnClickListener(v -> {
             if (spacePos < RIGHT) {
@@ -238,9 +243,10 @@ public class GameActivity extends AppCompatActivity {
         });
     }
 
-    private void setPlayerVisible() {
+    private static void setPlayerPositions() {
         playerView[RIGHT].setVisibility(View.INVISIBLE);
         playerView[RIGHT_CENTER].setVisibility(View.INVISIBLE);
+        playerView[CENTER].setVisibility(View.VISIBLE);
         playerView[LEFT].setVisibility(View.INVISIBLE);
         playerView[LEFT_CENTER].setVisibility(View.INVISIBLE);
     }
@@ -263,12 +269,11 @@ public class GameActivity extends AppCompatActivity {
 
     public static void resetGame() {
         score = 0;
-        lifeCounter = 3;
+        //lifeCounter = 3;
         spacePos = CENTER;
 
-        playerView[LEFT].setVisibility(View.INVISIBLE);
-        playerView[CENTER].setVisibility(View.VISIBLE);
-        playerView[RIGHT].setVisibility(View.INVISIBLE);
+        setPlayerPositions();
+
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < LANES; j++) {
                 AlienView[i][j].setVisibility(View.INVISIBLE);
@@ -311,6 +316,10 @@ public class GameActivity extends AppCompatActivity {
         if (clock % 19 ==0){
             newPower(RandomLane);
         }
+        if (lifeCounter == 0) {
+            Intent intent = new Intent(GameActivity.this, HighScoreActivity.class);
+            startActivity(intent);
+        }
         checkHit(0);
     }
 
@@ -319,7 +328,8 @@ public class GameActivity extends AppCompatActivity {
         if (AlienView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
                 && playerView[spacePos].getVisibility() == View.VISIBLE) {
             AlienView[ROWS-1][spacePos].setVisibility(View.INVISIBLE);
-            LivesView[--lifeCounter].setVisibility(View.INVISIBLE);
+            lifeCounter--;
+            LivesView[lifeCounter].setVisibility(View.INVISIBLE);
             GameUtils.makeToast(this, lifeCounter);
             GameUtils.vibrate(this);
             if (score >=10) {
