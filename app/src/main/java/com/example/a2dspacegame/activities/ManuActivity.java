@@ -1,6 +1,7 @@
 package com.example.a2dspacegame.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
@@ -13,6 +14,7 @@ import android.widget.TextView;
 import com.example.a2dspacegame.R;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 
 public class ManuActivity extends AppCompatActivity {
@@ -25,6 +27,8 @@ public class ManuActivity extends AppCompatActivity {
 
     private boolean isFastButtonClicked = false;
     private boolean isSlowButtonClicked = false;
+
+    private TextInputEditText name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +47,8 @@ public class ManuActivity extends AppCompatActivity {
         speedOptionsLinearLayout = findViewById(R.id.main_LL_speedOptions);
         gameModeOptionsLinearLayout = findViewById(R.id.main_LL_gameModeOptions);
         highScores = findViewById(R.id.main_BTN_highScores);
+        name = findViewById(R.id.list_ET_name);
+
 
         // Set the background of the layout
         ConstraintLayout layout = findViewById(R.id.manu_activity);

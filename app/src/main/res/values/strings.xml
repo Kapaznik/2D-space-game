@@ -11,6 +11,7 @@
     <string name="sensors_txt">Sensors</string>
     <string name="mode_txt">Game mode:</string>
     <string name="high_scores_txt">Highscores</string>
+    <string name="name">Enter your name</string>
 
 
 </resources>

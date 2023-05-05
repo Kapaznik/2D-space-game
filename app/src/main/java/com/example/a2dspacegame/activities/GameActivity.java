@@ -1,6 +1,5 @@
 package com.example.a2dspacegame.activities;
 
-
 import androidx.appcompat.app.AppCompatActivity;
 //import static com.example.a2dspacegame.activities.ManuActivity.GAME_MODE;
 
@@ -21,6 +20,7 @@ import android.hardware.SensorEventListener;
 import android.widget.Toast;
 
 import com.example.a2dspacegame.R;
+import com.example.a2dspacegame.activities.GameUtils;
 
 import java.util.Random;
 import java.util.Timer;
@@ -53,7 +53,7 @@ public class GameActivity extends AppCompatActivity {
     public static int lifeCounter = 3;
     private static int score = 0;
 
-    private static int DELAY = 500;
+    private static int DELAY = 100;
 
     public int clock = 0;
 
@@ -141,9 +141,9 @@ public class GameActivity extends AppCompatActivity {
         // Retrieve speed from intent and set the delay accordingly
         String speed = getIntent().getStringExtra("SPEED");
         if (speed != null && speed.equals("FAST")) {
-            DELAY = 500;
+            DELAY = 100;
         } else if (speed != null && speed.equals("SLOW")) {
-            DELAY = 1000;
+            DELAY = 100;
         }
     }
 
@@ -314,8 +314,8 @@ public class GameActivity extends AppCompatActivity {
         checkHit(0);
     }
 
-        private void checkHit(int move)
-        {
+    private void checkHit(int move)
+    {
         if (AlienView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
                 && playerView[spacePos].getVisibility() == View.VISIBLE) {
             AlienView[ROWS-1][spacePos].setVisibility(View.INVISIBLE);
