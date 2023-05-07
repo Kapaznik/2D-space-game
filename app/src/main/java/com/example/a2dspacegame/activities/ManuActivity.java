@@ -1,7 +1,6 @@
 package com.example.a2dspacegame.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 
@@ -30,10 +29,14 @@ public class ManuActivity extends AppCompatActivity {
 
     private TextInputEditText name;
 
+    private String nameString = "";
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         final String GAME_MODE = "GAME_MODE";
         final String SPEED = "SPEED";
+        final String NAME = "NAME";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manu);
 
@@ -86,6 +89,8 @@ public class ManuActivity extends AppCompatActivity {
                 } else if (isSlowButtonClicked) {
                     gameIntent.putExtra(SPEED, "SLOW");
                 }
+                nameString = name.getText().toString();
+                gameIntent.putExtra(NAME, nameString);
                 startActivity(gameIntent);
 
 

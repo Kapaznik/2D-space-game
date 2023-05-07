@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,7 +28,6 @@ public class GameActivity extends AppCompatActivity {
 
     final static int LANES = 5;
     final static int ROWS = 9;
-    private static String GAME_MODE = "";
 
     private static ImageView[][] AlienView;
     private static ImageView[][] PowerView;
@@ -59,8 +59,6 @@ public class GameActivity extends AppCompatActivity {
     Random random = new Random();
 
     CountDownTimer countDownTimer;
-
-    private String gameMode = "";
 
     private SensorManager sensorManager;
     private Sensor sensor;
@@ -129,19 +127,21 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         initViews();
+        getValues();
+    }
 
+    private void getValues() {
         // Retrieve game mode from intent and initialize sensors or arrows accordingly
-        if (getIntent() != null) {
-            String gameMode = getIntent().getStringExtra("GAME_MODE");
-            Toast.makeText(getApplicationContext(), "gameMode: " + gameMode, Toast.LENGTH_SHORT).show();
-            if (gameMode.equals("Sensors")) {
-                initSensor();
-            }
-            else {
-                setArrowsListeners();
-            }
-
+        String gameMode = getIntent().getStringExtra("GAME_MODE");
+        //Toast.makeText(getApplicationContext(), "gameMode: " + gameMode, Toast.LENGTH_SHORT).show();
+        if (gameMode.equals("Sensors")) {
+            initSensor();
         }
+        else {
+            setArrowsListeners();
+        }
+        String name = getIntent().getStringExtra("NAME");
+        Toast.makeText(getApplicationContext(), "gameMode: " + name, Toast.LENGTH_SHORT).show();
 
         // Retrieve speed from intent and set the delay accordingly
         String speed = getIntent().getStringExtra("SPEED");
