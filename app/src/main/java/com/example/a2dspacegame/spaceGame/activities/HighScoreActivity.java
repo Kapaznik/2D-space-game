@@ -1,6 +1,7 @@
 package com.example.a2dspacegame.spaceGame.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;

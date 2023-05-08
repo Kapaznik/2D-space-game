@@ -2,9 +2,12 @@ package com.example.a2dspacegame.spaceGame.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -46,12 +49,22 @@ public class ManuActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String fromJSON = MySPv3.getInstance2(ManuActivity.this).getString("MY_DB", "");
+        records = new Gson().fromJson(fromJSON, RecordList.class);
+        if (records == null)
+            records = new RecordList();
 
         final String GAME_MODE = "GAME_MODE";
         final String SPEED = "SPEED";
         final String NAME = "NAME";
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manu);
+
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+        }
 
         // Get references to all the views in the layout
         welcomeTextView = findViewById(R.id.main_ET_welcome);
@@ -111,7 +124,13 @@ public class ManuActivity extends AppCompatActivity {
         highScores.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ManuActivity.this, HighScoreActivity.class));
+                Intent intent = new Intent(ManuActivity.this, HighScoreActivity.class);
+                Bundle bundle = new Bundle();
+                String json = new Gson().toJson(records);
+                bundle.putString("records", json);
+                intent.putExtra("records", bundle);
+                MySPv3.getInstance2(ManuActivity.this).putString("MY_DB", json);
+                startActivity(intent);
             }
         });
     }
