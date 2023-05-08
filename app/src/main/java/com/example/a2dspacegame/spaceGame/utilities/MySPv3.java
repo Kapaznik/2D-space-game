@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.a2dspacegame.spaceGame.activities.GameActivity;
+import com.example.a2dspacegame.spaceGame.activities.HighScoreActivity;
+import com.example.a2dspacegame.spaceGame.activities.ManuActivity;
 
 public class MySPv3 {
 
@@ -23,6 +25,13 @@ public class MySPv3 {
     }
 
     public static MySPv3 getInstance(GameActivity gameActivity) {
+        if (instance == null) {
+            instance = new MySPv3(gameActivity);
+        }
+        return instance;
+    }
+
+    public static MySPv3 getInstance(ManuActivity gameActivity) {
         if (instance == null) {
             instance = new MySPv3(gameActivity);
         }

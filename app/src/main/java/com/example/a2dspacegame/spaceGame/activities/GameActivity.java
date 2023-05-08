@@ -57,8 +57,8 @@ public class GameActivity extends AppCompatActivity {
 
     private static int spacePos = CENTER;
 
-    public static int lifeCounter = 3;
-    private static int score = 0;
+    public static int lifeCounter = 2;
+    private long score = 0;
 
     private static int DELAY = 100;
 
@@ -90,8 +90,9 @@ public class GameActivity extends AppCompatActivity {
         start();
     }
 
+
     private void start() {
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
@@ -127,17 +128,17 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
-        timer.cancel();
-        finishAffinity();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onStop() {
+        super.onStop();
+        stopTimer();
     }
+
+    private void stopTimer() {
+        timer.cancel();
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,14 +156,11 @@ public class GameActivity extends AppCompatActivity {
     private void getValues() {
         // Retrieve game mode from intent and initialize sensors or arrows accordingly
         String gameMode = getIntent().getStringExtra("GAME_MODE");
-        //Toast.makeText(getApplicationContext(), "gameMode: " + gameMode, Toast.LENGTH_SHORT).show();
         if (gameMode.equals("Sensors")) {
             initSensor();
         } else {
             setArrowsListeners();
         }
-        String name = getIntent().getStringExtra("NAME");
-        Toast.makeText(getApplicationContext(), "gameMode: " + name, Toast.LENGTH_SHORT).show();
 
         // Retrieve speed from intent and set the delay accordingly
         String speed = getIntent().getStringExtra("SPEED");
@@ -289,8 +287,6 @@ public class GameActivity extends AppCompatActivity {
     }
 
     public static void resetGame() {
-        score = 0;
-        //lifeCounter = 3;
         spacePos = CENTER;
 
         setPlayerPositions();
@@ -338,61 +334,68 @@ public class GameActivity extends AppCompatActivity {
         if (clock % 19 == 0) {
             newPower(RandomLane);
         }
-        if (lifeCounter == 0) {
-            Intent intent = new Intent(GameActivity.this, HighScoreActivity.class);
-            gameOver();
-            startActivity(intent);
-        }
         checkHit(0);
     }
 
     private void gameOver() {
+        timer.cancel();
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         Record record = new Record();
-        record.setScore(score);
-        record.setLat(location.getLatitude());
-        record.setLon(location.getLongitude());
+        String name = getIntent().getStringExtra("NAME");
+        Log.i("playername",name+"");
+
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
         if (records.getRecords().size() <=10) {
+            record.setName(name).setScore(score).setLat(location.getLatitude()).setLon(location.getLongitude());
             records.getRecords().add(record);
         }
         if (records.getRecords().get(records.getRecords().size() - 1).getScore() < score) {
+            Log.i("newscore",score+"");
+            Log.i("oldscore",records.getRecords().get(records.getRecords().size() - 1).getScore()+"");
+            record.setName(name).setScore(score).setLat(location.getLatitude()).setLon(location.getLongitude());
             records.getRecords().set(records.getRecords().size() - 1, record);
         }
         records.sortRecords();
-    }
-    private void checkHit(int move)
-    {
-        if (AlienView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
-                && playerView[spacePos].getVisibility() == View.VISIBLE) {
-            AlienView[ROWS-1][spacePos].setVisibility(View.INVISIBLE);
-            lifeCounter--;
-            LivesView[lifeCounter].setVisibility(View.INVISIBLE);
-            SignalGenerator.makeToast(this, lifeCounter);
-            SignalGenerator.vibrate(this);
-            if (score >=10) {
-                score -= 10;
-            }
-            else{
-                score=0;
-            }
-        }
-        if (PowerView[ROWS-1][spacePos].getVisibility() == View.VISIBLE
-                && playerView[spacePos].getVisibility() == View.VISIBLE) {
-            PowerView[ROWS - 1][spacePos].setVisibility(View.INVISIBLE);
-            score += 10;
-            SignalGenerator.makeToast(this, -1);
-            SignalGenerator.vibrate(this);
-        }
-        else{
-            if (move ==0)
-                score++;
-            String scoreSetText = "" + score;
-            PointsView.setText(scoreSetText);
-        }
-    }
+        Intent intent = new Intent(this, HighScoreActivity.class);
+        Bundle bundle = new Bundle();
+        String json = new Gson().toJson(records);
+        bundle.putString("records", json);
+        intent.putExtra("records", bundle);
+        MySPv3.getInstance(this).putString("MY_DB", json);
+        finish();
+        startActivity(intent);
 
-}
+    }
+    private void checkHit(int move) {
+        if (lifeCounter != -1) {
+            if (AlienView[ROWS - 1][spacePos].getVisibility() == View.VISIBLE
+                    && playerView[spacePos].getVisibility() == View.VISIBLE) {
+                AlienView[ROWS - 1][spacePos].setVisibility(View.INVISIBLE);
+                LivesView[lifeCounter--].setVisibility(View.INVISIBLE);
+                SignalGenerator.makeToast(this, lifeCounter);
+                SignalGenerator.vibrate(this);
+                if (score >= 10) {
+                    score -= 10;
+                } else {
+                    score = 0;
+                }
+            }
+            if (PowerView[ROWS - 1][spacePos].getVisibility() == View.VISIBLE
+                    && playerView[spacePos].getVisibility() == View.VISIBLE) {
+                PowerView[ROWS - 1][spacePos].setVisibility(View.INVISIBLE);
+                score += 10;
+            } else {
+                if (move == 0)
+                    score++;
+                String scoreSetText = "" + score;
+                PointsView.setText(scoreSetText);
+            }
+        }
+        else
+            gameOver();
+        }
+    }

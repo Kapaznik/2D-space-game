@@ -6,15 +6,24 @@ import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.a2dspacegame.R;
+import com.example.a2dspacegame.spaceGame.Models.Record;
+import com.example.a2dspacegame.spaceGame.Models.RecordList;
+import com.example.a2dspacegame.spaceGame.utilities.MySPv3;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ManuActivity extends AppCompatActivity {
 
@@ -31,9 +40,13 @@ public class ManuActivity extends AppCompatActivity {
 
     private String nameString = "";
 
+    private RecordList records;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         final String GAME_MODE = "GAME_MODE";
         final String SPEED = "SPEED";
         final String NAME = "NAME";

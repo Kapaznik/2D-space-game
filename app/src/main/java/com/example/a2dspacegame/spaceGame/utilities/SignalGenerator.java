@@ -30,13 +30,13 @@ public class SignalGenerator {
         if (lifeCounter == -1)
             Toast.makeText(context, "You got +10 points!", Toast.LENGTH_LONG).show();
         switch (lifeCounter) {
-            case 2:
+            case 1:
                 Toast.makeText(context, "2 lives left", Toast.LENGTH_LONG).show();
                 break;
-            case 1:
+            case 0:
                 Toast.makeText(context, "1 life left", Toast.LENGTH_LONG).show();
                 break;
-            case 0:
+            case -1:
                 Toast.makeText(context, "game over!", Toast.LENGTH_LONG).show();
                 GameActivity.resetGame();
         }
