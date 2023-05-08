@@ -1,4 +1,4 @@
-package com.example.a2dspacegame.activities;
+package com.example.a2dspacegame.spaceGame.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

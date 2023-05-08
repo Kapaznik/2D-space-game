@@ -1,4 +1,4 @@
-package com.example.a2dspacegame.activities;
+package com.example.a2dspacegame.spaceGame.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;

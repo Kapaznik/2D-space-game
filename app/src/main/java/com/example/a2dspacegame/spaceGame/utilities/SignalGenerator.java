@@ -1,13 +1,30 @@
-package com.example.a2dspacegame.activities;
+package com.example.a2dspacegame.spaceGame.utilities;
 
 import android.content.Context;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.widget.Toast;
 
-import com.example.a2dspacegame.activities.GameActivity;
+import com.example.a2dspacegame.spaceGame.activities.GameActivity;
 
-public class GameUtils {
+
+public class SignalGenerator {
+    private static SignalGenerator instance;
+    private Context context;
+
+    private SignalGenerator(Context context) {
+        this.context = context;
+    }
+
+    public static void init(Context context) {
+        if (instance == null) {
+            instance = new SignalGenerator(context);
+        }
+    }
+
+    public static SignalGenerator getInstance() {
+        return instance;
+    }
 
     public static void makeToast(Context context, int lifeCounter) {
         if (lifeCounter == -1)
