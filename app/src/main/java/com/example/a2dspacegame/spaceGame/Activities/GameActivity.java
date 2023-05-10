@@ -345,6 +345,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void gameOver() {
+        //records.clearRecords();
         death.start();
         timer.cancel();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -364,7 +365,10 @@ public class GameActivity extends AppCompatActivity {
             records.getRecords().set(records.getRecords().size() - 1, record);
         }
         records.sortRecords();
-        record.setRank(records.getRecords().size());
+        for (int i = 0; i < records.getRecords().size(); i++) {
+            Record r = records.getRecords().get(i);
+            r.setRank(i + 1);
+        }
         Intent intent = new Intent(this, HighScoreActivity.class);
         Bundle bundle = new Bundle();
         String json = new Gson().toJson(records);
