@@ -1,4 +1,4 @@
-package com.example.a2dspacegame.spaceGame.activities;
+package com.example.a2dspacegame.spaceGame.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -18,7 +18,6 @@ import android.hardware.SensorManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.widget.Toast;
 
 import com.example.a2dspacegame.R;
 import com.example.a2dspacegame.spaceGame.Models.Record;
@@ -29,6 +28,9 @@ import com.google.gson.Gson;
 
 import android.location.Location;
 import android.location.LocationManager;
+
+import android.media.MediaPlayer;
+
 
 import java.util.Random;
 import java.util.Timer;
@@ -78,6 +80,8 @@ public class GameActivity extends AppCompatActivity {
 
     private LocationManager locationManager;
     private Location location;
+
+    private MediaPlayer hit,death;
 
     public enum DirectionAction {LEFT, RIGHT}
 
@@ -214,6 +218,9 @@ public class GameActivity extends AppCompatActivity {
         playerView = new ImageView[5];
         LivesView = new ImageView[3];
         PointsView = findViewById(R.id.points_view);
+        hit = MediaPlayer.create(this, R.raw.bruh);
+
+
 
         int[] alienIds = {R.id.alien00, R.id.alien10, R.id.alien20, R.id.alien30, R.id.alien40, R.id.alien50, R.id.alien60, R.id.alien70, R.id.alien80};
         int[] powerIds = {R.id.power00, R.id.power10, R.id.power20, R.id.power30, R.id.power40, R.id.power50, R.id.power60, R.id.power70, R.id.power80};
@@ -345,20 +352,19 @@ public class GameActivity extends AppCompatActivity {
         }
         Record record = new Record();
         String name = getIntent().getStringExtra("NAME");
-        Log.i("playername",name+"");
-
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         if (records.getRecords().size() <=10) {
             record.setName(name).setScore(score).setLat(location.getLatitude()).setLon(location.getLongitude());
+            Log.i("bdika",record.getLat()+"");
             records.getRecords().add(record);
         }
         if (records.getRecords().get(records.getRecords().size() - 1).getScore() < score) {
-            Log.i("newscore",score+"");
-            Log.i("oldscore",records.getRecords().get(records.getRecords().size() - 1).getScore()+"");
             record.setName(name).setScore(score).setLat(location.getLatitude()).setLon(location.getLongitude());
             records.getRecords().set(records.getRecords().size() - 1, record);
         }
         records.sortRecords();
+        record.setRank(records.getRecords().size());
         Intent intent = new Intent(this, HighScoreActivity.class);
         Bundle bundle = new Bundle();
         String json = new Gson().toJson(records);
@@ -367,7 +373,6 @@ public class GameActivity extends AppCompatActivity {
         MySPv3.getInstance(this).putString("MY_DB", json);
         finish();
         startActivity(intent);
-
     }
     private void checkHit(int move) {
         if (lifeCounter != -1) {
@@ -375,6 +380,7 @@ public class GameActivity extends AppCompatActivity {
                     && playerView[spacePos].getVisibility() == View.VISIBLE) {
                 AlienView[ROWS - 1][spacePos].setVisibility(View.INVISIBLE);
                 LivesView[lifeCounter--].setVisibility(View.INVISIBLE);
+                //hit.start();
                 SignalGenerator.makeToast(this, lifeCounter);
                 SignalGenerator.vibrate(this);
                 if (score >= 10) {

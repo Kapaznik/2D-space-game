@@ -12,6 +12,10 @@
     <string name="mode_txt">Game mode:</string>
     <string name="high_scores_txt">Highscores</string>
     <string name="name">Enter your name</string>
+    <string name="player_rank">RANK</string>
+    <string name="player_name">NAME</string>
+    <string name="player_score">SCORE</string>
+
 
 
 </resources>

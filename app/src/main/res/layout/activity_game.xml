@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/newbackground"
     android:layoutDirection="ltr"
-    tools:context=".spaceGame.activities.GameActivity">
+    tools:context=".spaceGame.Activities.GameActivity">
 
     <TextView
         android:id="@+id/points_view"

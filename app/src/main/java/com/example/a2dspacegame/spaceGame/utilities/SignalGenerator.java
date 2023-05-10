@@ -5,7 +5,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.widget.Toast;
 
-import com.example.a2dspacegame.spaceGame.activities.GameActivity;
+import com.example.a2dspacegame.spaceGame.Activities.GameActivity;
 
 
 public class SignalGenerator {

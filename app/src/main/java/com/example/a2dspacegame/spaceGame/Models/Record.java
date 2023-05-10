@@ -2,6 +2,8 @@ package com.example.a2dspacegame.spaceGame.Models;
 
 public class Record implements Comparable<Record>{
     private String name = "";
+
+    private int rank = 0;
     private long score = 0;
     private double lat = 0.0;
     private double lon = 0.0;
@@ -14,6 +16,15 @@ public class Record implements Comparable<Record>{
 
     public Record setName(String name) {
         this.name = name;
+        return this;
+    }
+
+    public int getRank() {
+        return rank;
+    }
+
+    public Record setRank(int rank) {
+        this.rank = rank;
         return this;
     }
 

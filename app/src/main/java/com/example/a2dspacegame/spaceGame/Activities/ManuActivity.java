@@ -1,4 +1,4 @@
-package com.example.a2dspacegame.spaceGame.activities;
+package com.example.a2dspacegame.spaceGame.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -9,13 +9,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.a2dspacegame.R;
-import com.example.a2dspacegame.spaceGame.Models.Record;
 import com.example.a2dspacegame.spaceGame.Models.RecordList;
 import com.example.a2dspacegame.spaceGame.utilities.MySPv3;
 import com.google.android.material.button.MaterialButton;
@@ -23,10 +21,6 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ManuActivity extends AppCompatActivity {
 
@@ -63,7 +57,7 @@ public class ManuActivity extends AppCompatActivity {
 
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+            requestPermissions(new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},1);
         }
 
         // Get references to all the views in the layout

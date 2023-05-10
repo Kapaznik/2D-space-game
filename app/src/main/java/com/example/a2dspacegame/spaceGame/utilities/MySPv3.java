@@ -3,8 +3,10 @@ package com.example.a2dspacegame.spaceGame.utilities;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.a2dspacegame.spaceGame.activities.GameActivity;
-import com.example.a2dspacegame.spaceGame.activities.ManuActivity;
+import com.example.a2dspacegame.spaceGame.Activities.GameActivity;
+import com.example.a2dspacegame.spaceGame.Activities.ManuActivity;
+import com.example.a2dspacegame.spaceGame.Fragments.ListFragment;
+
 
 public class MySPv3 {
 
@@ -34,6 +36,10 @@ public class MySPv3 {
         if (instance == null) {
             instance = new MySPv3(manuActivity);
         }
+        return instance;
+    }
+
+    public static MySPv3 getInstance() {
         return instance;
     }
 
