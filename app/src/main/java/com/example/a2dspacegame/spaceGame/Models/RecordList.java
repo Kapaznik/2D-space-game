@@ -18,4 +18,7 @@ public class RecordList {
     public void sortRecords(){
         Collections.sort(records);
     }
+    public void clearRecords() {
+        records.clear();
+    }
 }

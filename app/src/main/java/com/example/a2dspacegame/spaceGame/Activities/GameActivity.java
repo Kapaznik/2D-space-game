@@ -81,7 +81,7 @@ public class GameActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private Location location;
 
-    private MediaPlayer hit,death;
+    private MediaPlayer hit, death;
 
     public enum DirectionAction {LEFT, RIGHT}
 
@@ -154,6 +154,7 @@ public class GameActivity extends AppCompatActivity {
         records = new Gson().fromJson(fromJSON, RecordList.class);
         if (records == null)
             records = new RecordList();
+
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     }
 
@@ -219,8 +220,8 @@ public class GameActivity extends AppCompatActivity {
         LivesView = new ImageView[3];
         PointsView = findViewById(R.id.points_view);
         hit = MediaPlayer.create(this, R.raw.bruh);
-
-
+        death = MediaPlayer.create(this,R.raw.death);
+        lifeCounter=2;
 
         int[] alienIds = {R.id.alien00, R.id.alien10, R.id.alien20, R.id.alien30, R.id.alien40, R.id.alien50, R.id.alien60, R.id.alien70, R.id.alien80};
         int[] powerIds = {R.id.power00, R.id.power10, R.id.power20, R.id.power30, R.id.power40, R.id.power50, R.id.power60, R.id.power70, R.id.power80};
@@ -295,7 +296,6 @@ public class GameActivity extends AppCompatActivity {
 
     public static void resetGame() {
         spacePos = CENTER;
-
         setPlayerPositions();
 
         for (int i = 0; i < ROWS; i++) {
@@ -345,6 +345,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void gameOver() {
+        death.start();
         timer.cancel();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -356,7 +357,6 @@ public class GameActivity extends AppCompatActivity {
 
         if (records.getRecords().size() <=10) {
             record.setName(name).setScore(score).setLat(location.getLatitude()).setLon(location.getLongitude());
-            Log.i("bdika",record.getLat()+"");
             records.getRecords().add(record);
         }
         if (records.getRecords().get(records.getRecords().size() - 1).getScore() < score) {
@@ -380,7 +380,7 @@ public class GameActivity extends AppCompatActivity {
                     && playerView[spacePos].getVisibility() == View.VISIBLE) {
                 AlienView[ROWS - 1][spacePos].setVisibility(View.INVISIBLE);
                 LivesView[lifeCounter--].setVisibility(View.INVISIBLE);
-                //hit.start();
+                hit.start();
                 SignalGenerator.makeToast(this, lifeCounter);
                 SignalGenerator.vibrate(this);
                 if (score >= 10) {

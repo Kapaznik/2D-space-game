@@ -1,65 +1,93 @@
 package com.example.a2dspacegame.spaceGame.Fragments;
-import com.example.a2dspacegame.spaceGame.Activities.GameActivity;
-import com.example.a2dspacegame.spaceGame.Models.RecordList;
-import com.example.a2dspacegame.spaceGame.utilities.MySPv3;
-import com.example.a2dspacegame.spaceGame.utilities.SignalGenerator;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.GoogleMap;
-import com.example.a2dspacegame.spaceGame.CallBacks.MapCallBack;
-import com.example.a2dspacegame.spaceGame.Models.Record;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import com.google.android.gms.maps.CameraUpdateFactory;
+
 import com.example.a2dspacegame.R;
-import com.google.gson.Gson;import com.google.android.gms.maps.OnMapReadyCallback;
+import com.example.a2dspacegame.spaceGame.CallBacks.MapCallBack;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.example.a2dspacegame.spaceGame.CallBacks.MapCallBack;
-
-
-import androidx.annotation.Nullable;
-
-import com.google.android.gms.maps.model.CameraPosition;
-
-import com.google.android.gms.maps.model.Marker;
-
-
-import java.util.ArrayList;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
     private GoogleMap mMap;
-    private ArrayList<Marker> markers;
+    private FusedLocationProviderClient fusedLocationClient;
 
+    private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getMapAsync(this);
+
+        // Initialize the FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
+
+        // Check if location permission is granted
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // If permission is granted, enable the user's location on the map
+            getMapAsync(this);
+        } else {
+            // Request location permission
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
+        }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        // Set the map's camera position to a specific coordinate
-        LatLng coordinate = new LatLng(37.7749, -122.4194); // San Francisco
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(coordinate, 12);
-        mMap.moveCamera(cameraUpdate);
+        // Enable the user's location on the map
+        enableMyLocation();
     }
-    public void zoomOnRecord(int rank, double x, double y) {
 
-        LatLng point = new LatLng(x, y);
-        CameraPosition cameraPosition = new CameraPosition.Builder().target(point).zoom(12).build();
-        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+    private void enableMyLocation() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        markers.get(rank-1).showInfoWindow();
+            // Move the camera to the user's current location
+            fusedLocationClient.getLastLocation().addOnSuccessListener(requireActivity(), location -> {
+                if (location != null) {
+                    LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, 12);
+                    mMap.moveCamera(cameraUpdate);
+                }
+            });
+        }
+    }
 
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, enable the user's location on the map
+                enableMyLocation();
+            } else {
+                // Permission denied, inform the user and disable the user's location on the map
+                Toast.makeText(requireContext(), "Location permission is required to use this feature.", Toast.LENGTH_SHORT).show();
+                mMap.setMyLocationEnabled(false);
+                mMap.getUiSettings().setMyLocationButtonEnabled(false);
+            }
+        }
     }
 }
