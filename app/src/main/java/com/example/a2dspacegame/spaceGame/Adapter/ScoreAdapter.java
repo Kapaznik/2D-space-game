@@ -1,5 +1,5 @@
 package com.example.a2dspacegame.spaceGame.Adapter;
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
@@ -17,8 +17,7 @@ import java.util.ArrayList;
 
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder> {
-    private Context context;
-    private ArrayList<Record> records;
+    private final ArrayList<Record> records;
     public ListCallBack listCallBack_;
 
     public void setCallBack_sendClick(ListCallBack listCallBack_) {
@@ -26,7 +25,6 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
     }
 
     public ScoreAdapter(ArrayList<Record> records) {
-        this.context = context;
         this.records = records;
     }
 
@@ -35,10 +33,10 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
     @Override
     public ScoreViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.score, parent, false);
-        ScoreViewHolder scoreViewHolder = new ScoreViewHolder(view);
-        return scoreViewHolder;
+        return new ScoreViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ScoreViewHolder holder, int position) {
         Record score = getItem(position);
@@ -58,11 +56,11 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
     }
 
     public class ScoreViewHolder extends RecyclerView.ViewHolder {
-        private MaterialTextView score_LBL_rank;
+        private final MaterialTextView score_LBL_rank;
 
-        private MaterialTextView score_LBL_name;
+        private final MaterialTextView score_LBL_name;
 
-        private MaterialTextView score_LBL_score;
+        private final MaterialTextView score_LBL_score;
 
 
         public ScoreViewHolder(@NonNull View itemView) {
@@ -73,10 +71,11 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
             itemView.setOnClickListener(v -> {
                 if (listCallBack_ != null)
                     listCallBack_.rowSelected(
-                            getItem(getAdapterPosition()).getRank(),
-                            getItem(getAdapterPosition()).getLat(),
-                            getItem(getAdapterPosition()).getLon());
+                            getItem(getBindingAdapterPosition()).getRank(),
+                            getItem(getBindingAdapterPosition()).getLat(),
+                            getItem(getBindingAdapterPosition()).getLon());
             });
         }
+
     }
 }

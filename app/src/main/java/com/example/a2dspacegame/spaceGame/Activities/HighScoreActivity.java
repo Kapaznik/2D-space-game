@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.a2dspacegame.spaceGame.Fragments.ListFragment;
 import com.example.a2dspacegame.spaceGame.Fragments.MapFragment;
-import com.example.a2dspacegame.spaceGame.CallBacks.MapCallBack;
 import com.example.a2dspacegame.R;
 
 

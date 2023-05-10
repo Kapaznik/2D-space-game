@@ -346,6 +346,7 @@ public class GameActivity extends AppCompatActivity {
 
     private void gameOver() {
         //records.clearRecords();
+        sensorManager.unregisterListener(accSensorEventListener);
         death.start();
         timer.cancel();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
