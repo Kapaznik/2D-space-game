@@ -14,7 +14,7 @@ import com.example.a2dspacegame.spaceGame.Adapter.ScoreAdapter;
 import com.example.a2dspacegame.spaceGame.CallBacks.ListCallBack;
 import com.example.a2dspacegame.spaceGame.Models.Record;
 import com.example.a2dspacegame.spaceGame.Models.RecordList;
-import com.example.a2dspacegame.spaceGame.utilities.MySPv3;
+import com.example.a2dspacegame.spaceGame.Utilities.MySPv3;
 import com.example.a2dspacegame.R;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.gson.Gson;

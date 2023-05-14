@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.a2dspacegame.R;
 import com.example.a2dspacegame.spaceGame.Models.RecordList;
-import com.example.a2dspacegame.spaceGame.utilities.MySPv3;
+import com.example.a2dspacegame.spaceGame.Utilities.MySPv3;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;

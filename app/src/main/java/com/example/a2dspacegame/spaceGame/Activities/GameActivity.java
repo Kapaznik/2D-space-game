@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -22,8 +21,8 @@ import android.hardware.SensorEventListener;
 import com.example.a2dspacegame.R;
 import com.example.a2dspacegame.spaceGame.Models.Record;
 import com.example.a2dspacegame.spaceGame.Models.RecordList;
-import com.example.a2dspacegame.spaceGame.utilities.MySPv3;
-import com.example.a2dspacegame.spaceGame.utilities.SignalGenerator;
+import com.example.a2dspacegame.spaceGame.Utilities.MySPv3;
+import com.example.a2dspacegame.spaceGame.Utilities.SignalGenerator;
 import com.google.gson.Gson;
 
 import android.location.Location;

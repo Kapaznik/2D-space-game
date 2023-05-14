@@ -1,11 +1,10 @@
-package com.example.a2dspacegame.spaceGame.utilities;
+package com.example.a2dspacegame.spaceGame.Utilities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.example.a2dspacegame.spaceGame.Activities.GameActivity;
 import com.example.a2dspacegame.spaceGame.Activities.ManuActivity;
-import com.example.a2dspacegame.spaceGame.Fragments.ListFragment;
 
 
 public class MySPv3 {

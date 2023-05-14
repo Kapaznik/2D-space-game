@@ -1,5 +1,6 @@
-package com.example.a2dspacegame.spaceGame.utilities;
+package com.example.a2dspacegame.spaceGame.Utilities;
 
+import android.app.Application;
 import android.content.Context;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
@@ -8,7 +9,7 @@ import android.widget.Toast;
 import com.example.a2dspacegame.spaceGame.Activities.GameActivity;
 
 
-public class SignalGenerator {
+public class SignalGenerator extends Application {
     private static SignalGenerator instance;
     private Context context;
 
