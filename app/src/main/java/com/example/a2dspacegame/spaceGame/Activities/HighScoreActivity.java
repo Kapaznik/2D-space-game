@@ -5,10 +5,10 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.a2dspacegame.spaceGame.CallBacks.ListCallBack;
 import com.example.a2dspacegame.spaceGame.Fragments.ListFragment;
 import com.example.a2dspacegame.spaceGame.Fragments.MapFragment;
 import com.example.a2dspacegame.R;
-
 
 
 public class HighScoreActivity extends AppCompatActivity {
@@ -16,6 +16,12 @@ public class HighScoreActivity extends AppCompatActivity {
     private ListFragment listFragment;
     private MapFragment mapFragment;
 
+    private ListCallBack listCallBack = new ListCallBack() {
+        @Override
+        public void rowSelected(String name, double lat, double lon) {
+            MapFragment.rowSelected(name, lat,lon);
+        }
+    };
 
 
     public void onBackPressed() {
@@ -30,7 +36,6 @@ public class HighScoreActivity extends AppCompatActivity {
             setContentView(R.layout.activity_high_scores);
             initFragments();
             beginTransactions();
-
         }
 
     private void beginTransactions() {
@@ -40,6 +45,8 @@ public class HighScoreActivity extends AppCompatActivity {
 
     private void initFragments() {
         listFragment = new ListFragment();
+        listFragment.setCallBack_sendClick(listCallBack);
         mapFragment = new MapFragment();
+
     }
 }

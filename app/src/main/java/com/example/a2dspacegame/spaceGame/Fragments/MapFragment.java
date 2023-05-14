@@ -16,9 +16,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapFragment extends SupportMapFragment implements OnMapReadyCallback {
-    private GoogleMap mMap;
+    private static GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
 
     private static final int MY_PERMISSIONS_REQUEST_LOCATION = 1;
@@ -27,16 +28,12 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Initialize the FusedLocationProviderClient
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext());
 
-        // Check if location permission is granted
         if (ActivityCompat.checkSelfPermission(requireContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            // If permission is granted, enable the user's location on the map
             getMapAsync(this);
         } else {
-            // Request location permission
             requireActivity().requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_LOCATION);
         }
     }
@@ -68,14 +65,20 @@ public class MapFragment extends SupportMapFragment implements OnMapReadyCallbac
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == MY_PERMISSIONS_REQUEST_LOCATION) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, enable the user's location on the map
                 enableMyLocation();
             } else {
-                // Permission denied, inform the user and disable the user's location on the map
                 Toast.makeText(requireContext(), "Location permission is required to use this feature.", Toast.LENGTH_SHORT).show();
                 mMap.setMyLocationEnabled(false);
                 mMap.getUiSettings().setMyLocationButtonEnabled(false);
             }
+        }
+    }
+    public static void rowSelected(String name, double lat, double lon) {
+        if (mMap != null) {
+            LatLng currentLocation = new LatLng(lat, lon);
+            mMap.addMarker(new MarkerOptions().position(currentLocation).title(name));
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLocation, 13);
+            mMap.moveCamera(cameraUpdate);
         }
     }
 }

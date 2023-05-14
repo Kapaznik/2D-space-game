@@ -53,14 +53,5 @@ public class MySPv3 {
         editor.apply();
     }
 
-    public int getInt( String key, int defValue) {
-        return sharedPreferences.getInt(key, defValue);
-    }
-
-    public void putInt(String key, int value) {
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt(key, value);
-        editor.apply();
-    }
 
 }

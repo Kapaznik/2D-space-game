@@ -1,42 +1,35 @@
 package com.example.a2dspacegame.spaceGame.Fragments;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a2dspacegame.spaceGame.Adapter.ScoreAdapter;
 import com.example.a2dspacegame.spaceGame.CallBacks.ListCallBack;
-import com.example.a2dspacegame.spaceGame.CallBacks.MapCallBack;
 import com.example.a2dspacegame.spaceGame.Models.Record;
 import com.example.a2dspacegame.spaceGame.Models.RecordList;
 import com.example.a2dspacegame.spaceGame.utilities.MySPv3;
 import com.example.a2dspacegame.R;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 
-public class ListFragment extends Fragment {
+public class ListFragment extends Fragment implements ListCallBack{
     private RecyclerView scoreboard_LST_scores;
     private ListCallBack listCallBack;
-    private GoogleMap mMap;
 
-    public void setCallBack_sendClick(ListCallBack listCallBack_){
-        this.listCallBack = listCallBack_;
+
+    public void setCallBack_sendClick(ListCallBack listCallBack) {
+        this.listCallBack = listCallBack;
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -53,27 +46,14 @@ public class ListFragment extends Fragment {
         ArrayList<Record> scores = dataManager.getRecords();
         if (scores != null && !scores.isEmpty()) {
             ScoreAdapter scoreAdapter = new ScoreAdapter(scores);
+            scoreAdapter.setCallBack_sendClick(listCallBack);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
             linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
             scoreboard_LST_scores.setAdapter(scoreAdapter);
             scoreboard_LST_scores.setLayoutManager(linearLayoutManager);
-            scoreAdapter.setCallBack_sendClick(new ListCallBack() {
-                @Override
-                public void rowSelected(int rank, double lat, double lon) {
-
-                }
-            });
             scoreboard_LST_scores.setVisibility(View.VISIBLE);
         } else {
             scoreboard_LST_scores.setVisibility(View.GONE);
-        }
-
-        Record recordAtIndexOne = scores != null && scores.size() > 1 ? scores.get(1) : null;
-        if (recordAtIndexOne != null) {
-            Log.d("TAG", "Name: " + recordAtIndexOne.getName());
-            Log.d("TAG", "Score: " + recordAtIndexOne.getScore());
-            Log.d("TAG", "Location: " + recordAtIndexOne.getLon());
-            Log.d("TAG", "Location: " + recordAtIndexOne.getLat());
         }
     }
 
@@ -84,13 +64,14 @@ public class ListFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if (context instanceof MapCallBack) {
-            ((SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.score_FRAME_map)).getMapAsync(new OnMapReadyCallback() {
-                @Override
-                public void onMapReady(GoogleMap googleMap) {
-                    mMap = googleMap;
-                }
+        if (context instanceof ListCallBack) {
+            ((SupportMapFragment) Objects.requireNonNull(getChildFragmentManager().findFragmentById(R.id.score_FRAME_map))).getMapAsync(googleMap -> {
             });
         }
+    }
+
+    @Override
+    public void rowSelected(String name, double lat, double lon) {
+
     }
 }

@@ -62,7 +62,7 @@ public class GameActivity extends AppCompatActivity {
     public static int lifeCounter = 2;
     private long score = 0;
 
-    private static int DELAY = 100;
+    private static int DELAY = 200;
 
     public int clock = 0;
 
@@ -170,9 +170,9 @@ public class GameActivity extends AppCompatActivity {
         // Retrieve speed from intent and set the delay accordingly
         String speed = getIntent().getStringExtra("SPEED");
         if (speed != null && speed.equals("FAST")) {
-            DELAY = 100;
+            DELAY = 200;
         } else if (speed != null && speed.equals("SLOW")) {
-            DELAY = 100;
+            DELAY = 500;
         }
     }
 
@@ -345,8 +345,9 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void gameOver() {
-        //records.clearRecords();
-        sensorManager.unregisterListener(accSensorEventListener);
+        String gameMode = getIntent().getStringExtra("GAME_MODE");
+        if (gameMode.equals("Sensors"))
+            sensorManager.unregisterListener(accSensorEventListener);
         death.start();
         timer.cancel();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -357,7 +358,7 @@ public class GameActivity extends AppCompatActivity {
         String name = getIntent().getStringExtra("NAME");
         location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        if (records.getRecords().size() <=10) {
+        if (records.getRecords().size() <10) {
             record.setName(name).setScore(score).setLat(location.getLatitude()).setLon(location.getLongitude());
             records.getRecords().add(record);
         }
@@ -385,7 +386,8 @@ public class GameActivity extends AppCompatActivity {
                     && playerView[spacePos].getVisibility() == View.VISIBLE) {
                 AlienView[ROWS - 1][spacePos].setVisibility(View.INVISIBLE);
                 LivesView[lifeCounter--].setVisibility(View.INVISIBLE);
-                hit.start();
+                if (lifeCounter!=-1)
+                    hit.start();
                 SignalGenerator.makeToast(this, lifeCounter);
                 SignalGenerator.vibrate(this);
                 if (score >= 10) {

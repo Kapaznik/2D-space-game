@@ -1,5 +1,6 @@
 package com.example.a2dspacegame.spaceGame.Adapter;
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.view.View;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.a2dspacegame.R;
 import com.example.a2dspacegame.spaceGame.CallBacks.ListCallBack;
+import com.example.a2dspacegame.spaceGame.Fragments.ListFragment;
 import com.example.a2dspacegame.spaceGame.Models.Record;
 import com.google.android.material.textview.MaterialTextView;
 
@@ -18,10 +20,10 @@ import java.util.ArrayList;
 
 public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHolder> {
     private final ArrayList<Record> records;
-    public ListCallBack listCallBack_;
+    public ListCallBack listCallBack;
 
-    public void setCallBack_sendClick(ListCallBack listCallBack_) {
-        this.listCallBack_ = listCallBack_;
+    public void setCallBack_sendClick(ListCallBack listCallBack) {
+        this.listCallBack = listCallBack;
     }
 
     public ScoreAdapter(ArrayList<Record> records) {
@@ -69,9 +71,9 @@ public class ScoreAdapter extends RecyclerView.Adapter<ScoreAdapter.ScoreViewHol
             score_LBL_rank = itemView.findViewById(R.id.score_LBL_rank);
             score_LBL_score = itemView.findViewById(R.id.score_LBL_score);
             itemView.setOnClickListener(v -> {
-                if (listCallBack_ != null)
-                    listCallBack_.rowSelected(
-                            getItem(getBindingAdapterPosition()).getRank(),
+                if (listCallBack != null)
+                    listCallBack.rowSelected(
+                            getItem(getBindingAdapterPosition()).getName(),
                             getItem(getBindingAdapterPosition()).getLat(),
                             getItem(getBindingAdapterPosition()).getLon());
             });
