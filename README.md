@@ -1,7 +1,10 @@
 # 2D space game - dodge the aliens and beat the highscore!
 An experience out of Earth! 
 
-https://user-images.githubusercontent.com/87901270/231768994-71d375a0-12ee-498e-a71d-b3289532dd23.mp4
+
+
+https://github.com/Kapaznik/2D-space-game/assets/87901270/98733aa2-5a35-44f6-98a3-de1b3ba2751d
+
 
 
 ## Table of Contents
@@ -9,40 +12,41 @@ https://user-images.githubusercontent.com/87901270/231768994-71d375a0-12ee-498e-
 * [Technologies Used](#technologies-used)
 * [Features](#features)
 * [Screenshots](#screenshots)
-* [Setup](#setup)
 * [Project Status](#project-status)
-* [Room for Improvement](#room-for-improvement)
 * [Contact](#contact)
 
 
 ## General Information
-- Part 1 from 3 in Mobile applications course
+- Part 2 from 2 in Mobile applications course
+  - first part score: 95
 - My first experience with programming in Android studio with Java
 
 
 ## Technologies Used
 - Android studio
 - Android device 8.1+
-- _in progress_ upgrading the game during the semester
+- Google Maps API
 
 
 ## Features
-List the ready features here:
-- Moving the player left and right
-- Collision detection with aliens
+- Moving the player left and right with buttons or sensors
+- Collision detection with aliens and sound
+- Saving and loading data into JSON
+- Using google maps API to save locations of records
 
 
 ## Screenshots
 
-![Game screen](https://user-images.githubusercontent.com/87901270/231770528-f400ccbf-c00b-4909-91b9-8df5678ca0c9.jpg)
+![Main Screen](https://github.com/Kapaznik/2D-space-game/assets/87901270/62845e15-af3c-420b-b0a9-59614955dede)
+
+![Game Screen](https://github.com/Kapaznik/2D-space-game/assets/87901270/e1c52e36-3238-4687-ba29-bc0e55b30849)
+
+![HighScore Screen](https://github.com/Kapaznik/2D-space-game/assets/87901270/d0f03ee1-4bc1-41a9-a025-3969921d4765)
 
 
 ## Project Status
-Project is: _in progress_
+Project is: _done_
 
-
-## Room for Improvement
-During the semester I will add more lanes, highscores, donations and more
 
 
 Known issues:
